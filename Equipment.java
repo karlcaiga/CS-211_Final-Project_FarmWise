@@ -36,7 +36,11 @@ class Equipment extends FarmClass {
 
     @Override
     public String getStatus() {
-        return eqNeedsMaintenance ? "NEEDS MAINTENANCE" : "OPERATIONAL";
+    String status = "OPERATIONAL";
+        if (eqNeedsMaintenance) {
+            status = "NEEDS MAINTENANCE";
+        }
+    return status;
     }
 
     @Override
