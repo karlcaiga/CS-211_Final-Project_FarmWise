@@ -41,7 +41,53 @@ public class FarmWise {
 
     public void run() {
         displayWelcome();
+        
+        // Main program loop
+        boolean programRunning = true;
+        while (programRunning) {
+            programRunning = displayStartupMenu();
+        }
+    }
 
+    private void displayWelcome() {
+        // ASCII Art for FARMWISE in green
+        System.out.println(GREEN + BRIGHT);
+        System.out.println("███████╗ █████╗ ██████╗ ███╗   ███╗    ██╗    ██╗██╗███████╗███████╗");
+        System.out.println("██╔════╝██╔══██╗██╔══██╗████╗ ████║    ██║    ██║██║██╔════╝██╔════╝");
+        System.out.println("█████╗  ███████║██████╔╝██╔████╔██║    ██║ █╗ ██║██║███████╗█████╗  ");
+        System.out.println("██╔══╝  ██╔══██║██╔══██╗██║╚██╔╝██║    ██║███╗██║██║╚════██║██╔══╝  ");
+        System.out.println("██║     ██║  ██║██║  ██║██║ ╚═╝ ██║    ╚███╔███╔╝██║███████║███████╗");
+        System.out.println("╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚══╝╚══╝ ╚═╝╚══════╝╚══════╝" + RESET);
+        System.out.println("        W H E R E   S M A R T   D E C I S I O N S   G R O W            ");
+        System.out.println(RESET);
+    }
+
+    private boolean displayStartupMenu() {
+        System.out.println("[1]" + CYAN + BRIGHT + " Start" + RESET );
+        System.out.println("[2]" + GREEN + BRIGHT + " About" + RESET);
+        System.out.println("[3]" + RED + BRIGHT + " Exit" + RESET); 
+
+        int choice = getIntInput("\nSelect an option: ");
+        
+        switch (choice) {
+            case 1:
+                startProgram();
+                return true;
+            case 2:
+                showAbout();
+                return true;
+            case 3:
+                exitProgram();
+                return false;
+            default:
+                printError("Invalid choice. Please try again.");
+                return true;
+        }
+    }
+
+    private void startProgram() {
+
+        // Main program loop
         while (true) {
             displayMainMenu();
             int choice = getIntInput("Choose an option: ");
@@ -52,39 +98,74 @@ public class FarmWise {
                 case 3: scheduleMaintenance(); break;
                 case 4: viewDataReports(); break;
                 case 5: showSessionSummary(); break;
-                case 6: exitSystem(); return;
-                default: printError("Invalid choice. Please try again.");
+                case 6: 
+                    exitToStartup(); 
+                    return; // Return to startup menu
+                default: printError(RED + BRIGHT + "Invalid choice. Please try again." + RESET);
             }
         }
     }
 
-    private void displayWelcome() {
-        System.out.println(GREEN + BRIGHT +
-                "\n" + "=".repeat(50));
-        System.out.println("              FARMWISE SYSTEM                 ");
-        System.out.println("        Smart Farm Management Platform       ");
-        System.out.println("=".repeat(50) + RESET + "\n");
+    private void showAbout() {
+        System.out.println(YELLOW + BRIGHT + "\n══════════════════════════════════════════" + RESET);
+        System.out.println(YELLOW + BRIGHT + "              ABOUT FARMWISE              " + RESET);
+        System.out.println(YELLOW + BRIGHT + "══════════════════════════════════════════\n" + RESET);
+        
+        System.out.println(CYAN + "╔════════════════════════════════════════╗" + RESET);
+        System.out.println(CYAN + "║ " + GREEN + "FarmWise Management System v1.0       " + CYAN + " ║" + RESET);
+        System.out.println(CYAN + "║ " + YELLOW + "Developed for Modern Farm Operations  " + CYAN + " ║" + RESET);
+        System.out.println(CYAN + "║                                        " + CYAN + "║" + RESET);
+        System.out.println(CYAN + "║ " + GREEN + "FEATURES:                             " + CYAN + " ║" + RESET);
+        System.out.println(CYAN + "║ " + CYAN + "-Equipment Management                " + CYAN + "  ║" + RESET);
+        System.out.println(CYAN + "║ " + CYAN + "-Task Scheduling & Tracking          " + CYAN + "  ║" + RESET);
+        System.out.println(CYAN + "║ " + CYAN + "-Maintenance Scheduling              " + CYAN + "  ║" + RESET);
+        System.out.println(CYAN + "║ " + CYAN + "-Data Reports & Analytics            " + CYAN + "  ║" + RESET);
+        System.out.println(CYAN + "║ " + CYAN + "-Session Summary & Receipts          " + CYAN + "  ║" + RESET);
+        System.out.println(CYAN + "║                                        " + CYAN + "║" + RESET);
+        System.out.println(CYAN + "║ " + GREEN + "2025 FarmWise. All Rights Reserved. " + CYAN + "   ║" + RESET);
+        System.out.println(CYAN + "╚════════════════════════════════════════╝\n" + RESET);
+        
+        System.out.print("Press Enter to return to main menu...");
+        scanner.nextLine();
+    }
+
+    private void exitToStartup() {
+        System.out.println(YELLOW + BRIGHT + "\n══════════════════════════════════════════" + RESET);
+        System.out.println(YELLOW + "       RETURNING TO STARTUP MENU...          " + RESET);
+        System.out.println(YELLOW + BRIGHT + "══════════════════════════════════════════\n" + RESET);
+    }
+
+    private void exitProgram() {
+        System.out.println(RED + BRIGHT + "\n══════════════════════════════════════════" + RESET);
+        System.out.println(RED + BRIGHT + "         PROGRAM TERMINATION         " + RESET);
+        System.out.println(RED + BRIGHT + "══════════════════════════════════════════\n" + RESET);
+        
+        // Save session summary before exiting
+        if (!equipmentList.isEmpty() || !taskList.isEmpty()) {
+            receiptGenerator.saveSessionSummary(equipmentList, taskList);
+            System.out.println(GREEN + "Session summary saved to 'FarmWise_Summary.txt'" + RESET);
+        }
+        
+        System.out.println(YELLOW + BRIGHT + "\nTHANK YOU FOR USING FARMWISE! GOODBYE!\n" + RESET);
     }
 
     private void displayMainMenu() {
-        System.out.println(MAGENTA + BRIGHT + "\n" + "=".repeat(50) + "\n" + RESET);
-        System.out.println(CYAN + BRIGHT + "                  MAIN MENU                  " + RESET);
-        System.out.println(MAGENTA + BRIGHT + "=".repeat(50) + RESET);
-        System.out.println(GREEN + "  1. " + CYAN + "Manage Equipment" + RESET);
-        System.out.println(GREEN + "  2. " + YELLOW + "Manage Tasks" + RESET);
-        System.out.println(GREEN + "  3. " + GREEN + "Schedule Maintenance" + RESET);
-        System.out.println(GREEN + "  4. " + MAGENTA + "View Data and Reports" + RESET);
-        System.out.println(GREEN + "  5. " + CYAN + "Session Summary" + RESET);
-        System.out.println(GREEN + "  6. " + RED + "Exit System" + RESET);
-        System.out.println(MAGENTA + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(MAGENTA + "╔════════════════════════════════════════╗" + RESET);
+        System.out.println(MAGENTA + "║ " + GREEN + "1. " + CYAN + BRIGHT + "Manage Equipment             " + MAGENTA + "       ║" + RESET);
+        System.out.println(MAGENTA + "║ " + GREEN + "2. " + YELLOW + BRIGHT + "Manage Tasks                 " + MAGENTA + "       ║" + RESET);
+        System.out.println(MAGENTA + "║ " + GREEN + "3. " + GREEN + BRIGHT + "Schedule Maintenance         " + MAGENTA + "       ║" + RESET);
+        System.out.println(MAGENTA + "║ " + GREEN + "4. " + MAGENTA + BRIGHT + "View Data and Reports        " + MAGENTA + "       ║" + RESET);
+        System.out.println(MAGENTA + "║ " + GREEN + "5. " + GREEN + BRIGHT + "Session Summary              " + MAGENTA + "       ║" + RESET);
+        System.out.println(MAGENTA + "║ " + GREEN + "6. " + YELLOW + BRIGHT + "Return to Startup Menu       " + MAGENTA + "       ║" + RESET);
+        System.out.println(MAGENTA + "╚════════════════════════════════════════╝\n" + RESET);
     }
 
     // ======= MANAGE EQUIPMENT =======
     private void manageEquipment() {
         while (true) {
-            System.out.println(CYAN + BRIGHT + "\n" + "=".repeat(50) + RESET);
-            System.out.println(CYAN + BRIGHT + "             MANAGE EQUIPMENT             " + RESET);
-            System.out.println(CYAN + BRIGHT + "=".repeat(50) + RESET);
+            System.out.println(CYAN + BRIGHT + "\n" + "=".repeat(40) + RESET);
+            System.out.println(CYAN + BRIGHT + "             MANAGE EQUIPMENT              " + RESET);
+            System.out.println(CYAN + BRIGHT + "=".repeat(40) + RESET);
             System.out.println("1. View All Equipment");
             System.out.println("2. Add New Equipment");
             System.out.println("3. Update Equipment");
@@ -102,18 +183,18 @@ public class FarmWise {
                 case 5: markEquipmentMaintenance(); break;
                 case 6: performMaintenance(); break;
                 case 7: return;
-                default: printError("Invalid choice.");
+                default: printError(RED + BRIGHT + "Invalid choice.");
             }
         }
     }
 
     private void viewAllEquipment() {
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(YELLOW + BRIGHT + "             ALL EQUIPMENT             " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(YELLOW + BRIGHT + "              ALL EQUIPMENT              " + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         if (equipmentList.isEmpty()) {
-            printInfo("No equipment found.");
+            printInfo(RED + BRIGHT + "No equipment found.");
             return;
         }
         
@@ -123,9 +204,9 @@ public class FarmWise {
     }
 
     private void addNewEquipment() {
-        System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(GREEN + BRIGHT + "           ADD NEW EQUIPMENT           " + RESET);
-        System.out.println(GREEN + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(GREEN + BRIGHT + "            ADD NEW EQUIPMENT              " + RESET);
+        System.out.println(GREEN + BRIGHT + "=".repeat(40) + RESET);
         
         String id = "E" + String.format("%03d", equipmentCounter++);
         System.out.print("Enter equipment name: ");
@@ -142,12 +223,12 @@ public class FarmWise {
         if (typeChoice >= 1 && typeChoice <= EQUIPMENT_TYPES.length) {
             type = EQUIPMENT_TYPES[typeChoice - 1];
         } else {
-            printError("Invalid choice. Defaulting to 'Other'.");
+            printError(RED + BRIGHT + "Invalid choice. Defaulting to 'Other'.");
             type = "Other";
         }
 
         equipmentList.add(new Equipment(id, name, type));
-        printSuccess("Equipment added successfully! ID: " + id);
+        printSuccess(GREEN + BRIGHT + "Equipment added successfully! ID: " + id);
     }
 
     // NEW: Update equipment
@@ -179,9 +260,9 @@ public class FarmWise {
             }
             
             eq.updateEquipment(newName, newType);
-            printSuccess("Equipment updated successfully!");
+            printSuccess(GREEN + BRIGHT + "Equipment updated successfully!");
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
@@ -217,12 +298,12 @@ public class FarmWise {
             
             if (confirmation.equalsIgnoreCase("YES")) {
                 equipmentList.remove(index);
-                printSuccess("Equipment deleted successfully!");
+                printSuccess(GREEN + BRIGHT +"Equipment deleted successfully!");
             } else {
                 printInfo("Deletion cancelled.");
             }
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
@@ -237,7 +318,7 @@ public class FarmWise {
             equipmentList.get(index).markMaintenanceNeeded();
             printSuccess("Maintenance marked for: " + equipmentList.get(index).getName());
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
@@ -248,13 +329,13 @@ public class FarmWise {
         }
 
         if (needsMaintenance.isEmpty()) {
-            printInfo("No equipment needs maintenance.");
+            printInfo(RED + BRIGHT + "No equipment needs maintenance.");
             return;
         }
 
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(YELLOW + BRIGHT + "   EQUIPMENT NEEDING MAINTENANCE   " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(YELLOW + BRIGHT + "     EQUIPMENT NEEDING MAINTENANCE   " + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         for (int i = 0; i < needsMaintenance.size(); i++) {
             System.out.printf("%d. %s\n", (i + 1), needsMaintenance.get(i).getName());
@@ -267,16 +348,16 @@ public class FarmWise {
             needsMaintenance.get(index).performEqMaintenance();
             printSuccess("Maintenance completed for: " + needsMaintenance.get(index).getName());
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
     // ======= MANAGE TASKS =======
     private void manageTasks() {
         while (true) {
-            System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
-            System.out.println(YELLOW + BRIGHT + "               MANAGE TASKS               " + RESET);
-            System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+            System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
+            System.out.println(YELLOW + BRIGHT + "              MANAGE TASKS              " + RESET);
+            System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
             System.out.println("1. View All Tasks");
             System.out.println("2. Create New Task");
             System.out.println("3. Update Task");
@@ -294,18 +375,18 @@ public class FarmWise {
                 case 5: assignEquipmentToTask(); break;
                 case 6: markTaskCompleted(); break;
                 case 7: return;
-                default: printError("Invalid choice.");
+                default: printError(RED + BRIGHT + "Invalid choice.");
             }
         }
     }
 
     private void viewAllTasks() {
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(YELLOW + BRIGHT + "               ALL TASKS               " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(YELLOW + BRIGHT + "              ALL TASKS              " + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         if (taskList.isEmpty()) {
-            printInfo("No tasks found.");
+            printInfo(RED + BRIGHT + "No tasks found.");
             return;
         }
         
@@ -315,9 +396,9 @@ public class FarmWise {
     }
 
     private void createNewTask() {
-        System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(GREEN + BRIGHT + "            CREATE NEW TASK            " + RESET);
-        System.out.println(GREEN + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(GREEN + BRIGHT + "              CREATE NEW TASK              " + RESET);
+        System.out.println(GREEN + BRIGHT + "=".repeat(40) + RESET);
         
         String id = "T" + String.format("%03d", taskCounter++);
         System.out.print("Enter task name: ");
@@ -334,7 +415,7 @@ public class FarmWise {
         if (priorityChoice >= 1 && priorityChoice <= PRIORITY_LEVELS.length) {
             priority = PRIORITY_LEVELS[priorityChoice - 1];
         } else {
-            printError("Invalid choice. Defaulting to 'MEDIUM'.");
+            printError(RED + BRIGHT + "Invalid choice. Defaulting to 'MEDIUM'.");
             priority = "MEDIUM";
         }
         
@@ -357,14 +438,14 @@ public class FarmWise {
                         dueDate = null;
                     }
                 } catch (ParseException e) {
-                    printError("Invalid date format. Please use YYYY-MM-DD.");
+                    printError(RED + BRIGHT + "Invalid date format. Please use YYYY-MM-DD.");
                 }
             }
         }
 
         Tasks task = new Tasks(id, name, dueDate, priority);
         taskList.add(task);
-        printSuccess("Task created successfully! ID: " + id);
+        printSuccess(GREEN + BRIGHT + "Task created successfully! ID: " + id);
     }
 
     // NEW: Update task
@@ -379,7 +460,7 @@ public class FarmWise {
             Tasks task = taskList.get(index);
             
             if (task.isCompleted()) {
-                printError("Cannot update completed tasks.");
+                printError(RED + BRIGHT + "Cannot update completed tasks.");
                 return;
             }
             
@@ -413,14 +494,14 @@ public class FarmWise {
                         newDueDate = null;
                     }
                 } catch (ParseException e) {
-                    printError("Invalid date format. Keeping current due date.");
+                    printError(RED + BRIGHT + "Invalid date format. Keeping current due date.");
                 }
             }
             
             task.updateTask(newName, newPriority, newDueDate);
-            printSuccess("Task updated successfully!");
+            printSuccess(GREEN + BRIGHT +"Task updated successfully!");
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
@@ -442,12 +523,12 @@ public class FarmWise {
             
             if (confirmation.equalsIgnoreCase("YES")) {
                 taskList.remove(index);
-                printSuccess("Task deleted successfully!");
+                printSuccess(GREEN + BRIGHT +"Task deleted successfully!");
             } else {
                 printInfo("Deletion cancelled.");
             }
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
@@ -459,13 +540,13 @@ public class FarmWise {
         if (taskIndex == -1) return;
         
         if (taskIndex < 0 || taskIndex >= taskList.size()) {
-            printError("Invalid task selection.");
+            printError(RED + BRIGHT + "Invalid task selection.");
             return;
         }
 
         Tasks task = taskList.get(taskIndex);
         if (task.isCompleted()) {
-            printError("Cannot assign equipment to completed tasks.");
+            printError(RED + BRIGHT + "Cannot assign equipment to completed tasks.");
             return;
         }
 
@@ -479,11 +560,11 @@ public class FarmWise {
             Equipment eq = equipmentList.get(eqIndex);
             
             if (eq.eqNeedsMaintenance()) {
-                System.out.println("\nWarning: This equipment needs maintenance!");
+                System.out.println(YELLOW + BRIGHT + "\nWarning: This equipment needs maintenance!");
                 System.out.print("Assign anyway? (YES/NO): ");
                 String choice = scanner.nextLine();
                 if (!choice.equalsIgnoreCase("YES")) {
-                    printInfo("Assignment cancelled.");
+                    printInfo(RED + BRIGHT + "Assignment cancelled.");
                     return;
                 }
             }
@@ -492,7 +573,7 @@ public class FarmWise {
             task.assignEq(equipmentId);
             printSuccess("Equipment '" + eq.getName() + "' assigned to task '" + task.getName() + "'!");
         } else {
-            printError("Invalid equipment selection.");
+            printError(RED + BRIGHT + "Invalid equipment selection.");
         }
     }
 
@@ -503,13 +584,13 @@ public class FarmWise {
         }
 
         if (pendingTasks.isEmpty()) {
-            printInfo("No pending tasks.");
+            printInfo(YELLOW + BRIGHT + "No pending tasks.");
             return;
         }
 
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(YELLOW + BRIGHT + "             PENDING TASKS             " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(YELLOW + BRIGHT + "              PENDING TASKS              " + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         for (int i = 0; i < pendingTasks.size(); i++) {
             System.out.printf("%d. %s\n", (i + 1), pendingTasks.get(i).getName());
@@ -523,15 +604,15 @@ public class FarmWise {
             receiptGenerator.generateReceipt(pendingTasks.get(index));
             printSuccess("Task marked as completed! Receipt generated.");
         } else {
-            printError("Invalid selection.");
+            printError(RED + BRIGHT + "Invalid selection.");
         }
     }
 
     // ======= SCHEDULE MAINTENANCE =======
     private void scheduleMaintenance() {
-        System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(GREEN + BRIGHT + "        SCHEDULE MAINTENANCE        " + RESET);
-        System.out.println(GREEN + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(GREEN + BRIGHT + "         SCHEDULE MAINTENANCE              " + RESET);
+        System.out.println(GREEN + BRIGHT + "=".repeat(40) + RESET);
         
         List<Equipment> needMaintenance = new ArrayList<>();
         for (Equipment eq : equipmentList) {
@@ -555,9 +636,9 @@ public class FarmWise {
     // ======= VIEW DATA AND REPORTS =======
     private void viewDataReports() {
         while (true) {
-            System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(50) + RESET);
-            System.out.println(GREEN + BRIGHT + "          DATA & REPORTS          " + RESET);
-            System.out.println(GREEN + BRIGHT + "=".repeat(50) + RESET);
+            System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(40) + RESET);
+            System.out.println(GREEN + BRIGHT + "           DATA & REPORTS             " + RESET);
+            System.out.println(GREEN + BRIGHT + "=".repeat(40) + RESET);
             System.out.println("1. Equipment Status Report");
             System.out.println("2. Task Completion Report");
             System.out.println("3. Maintenance Report");
@@ -573,15 +654,15 @@ public class FarmWise {
                 case 4: viewAllEquipment(); break;
                 case 5: viewAllTasks(); break;
                 case 6: return;
-                default: printError("Invalid choice.");
+                default: printError(RED + BRIGHT + "Invalid choice.");
             }
         }
     }
 
     private void generateEquipmentReport() {
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
         System.out.println(YELLOW + BRIGHT + "     EQUIPMENT STATUS REPORT     " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         int operational = 0, maintenance = 0;
 
@@ -600,16 +681,16 @@ public class FarmWise {
     }
 
     private void generateTaskReport() {
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
         System.out.println(YELLOW + BRIGHT + "     TASK COMPLETION REPORT     " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         int completed = 0, pending = 0, overdue = 0;
 
         for (Tasks task : taskList) {
             String status = task.getStatus();
-            if (status.equals("COMPLETED")) completed++;
-            else if (status.equals("OVERDUE")) overdue++;
+            if (status.equals(GREEN + BRIGHT + "COMPLETED")) completed++;
+            else if (status.equals(RED + BRIGHT + "OVERDUE")) overdue++;
             else pending++;
 
             System.out.println("• " + task.getName() + " - " + status + " (" + task.getId() + ")");
@@ -625,18 +706,18 @@ public class FarmWise {
     }
 
     private void generateMaintenanceReport() {
-        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
         System.out.println(YELLOW + BRIGHT + "       MAINTENANCE REPORT       " + RESET);
-        System.out.println(YELLOW + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(YELLOW + BRIGHT + "=".repeat(40) + RESET);
         
         int needsMaintenance = 0;
 
         for (Equipment eq : equipmentList) {
             if (eq.eqNeedsMaintenance()) {
                 needsMaintenance++;
-                System.out.println("⚠ " + eq.getName() + " - REQUIRES MAINTENANCE (ID: " + eq.getId() + ")");
+                System.out.println(eq.getName() + " - REQUIRES MAINTENANCE (ID: " + eq.getId() + ")");
             } else {
-                System.out.println("✓ " + eq.getName() + " - Operational (ID: " + eq.getId() + ")");
+                System.out.println(eq.getName() + " - Operational (ID: " + eq.getId() + ")");
             }
         }
 
@@ -648,24 +729,24 @@ public class FarmWise {
 
     // ======= SESSION SUMMARY =======
     private void showSessionSummary() {
-        System.out.println(MAGENTA + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(MAGENTA + BRIGHT + "         SESSION SUMMARY         " + RESET);
-        System.out.println(MAGENTA + BRIGHT + "=".repeat(50) + RESET);
+        System.out.println(MAGENTA + BRIGHT + "\n" + "=".repeat(40) + RESET);
+        System.out.println(MAGENTA + BRIGHT + "             SESSION SUMMARY         " + RESET);
+        System.out.println(MAGENTA + BRIGHT + "=".repeat(40) + RESET);
         
         System.out.println("Total Equipment: " + equipmentList.size());
 
         int completedTasks = 0, pendingTasks = 0, overdueTasks = 0;
         for (Tasks task : taskList) {
             String status = task.getStatus();
-            if (status.equals("COMPLETED")) completedTasks++;
-            else if (status.equals("OVERDUE")) overdueTasks++;
+            if (status.equals(GREEN + BRIGHT +"COMPLETED")) completedTasks++;
+            else if (status.equals(RED + BRIGHT + "OVERDUE")) overdueTasks++;
             else pendingTasks++;
         }
 
         System.out.println("Total Tasks: " + taskList.size());
-        System.out.println("  • Completed: " + completedTasks);
-        System.out.println("  • Pending: " + pendingTasks);
-        System.out.println("  • Overdue: " + overdueTasks);
+        System.out.println(GREEN + BRIGHT + "Completed: " + completedTasks);
+        System.out.println(YELLOW + BRIGHT +"Pending: " + pendingTasks);
+        System.out.println(RED + BRIGHT + "Overdue: " + overdueTasks);
 
         int maintenanceNeeded = 0;
         for (Equipment eq : equipmentList) {
@@ -677,22 +758,11 @@ public class FarmWise {
         boolean foundRecent = false;
         for (Tasks task : taskList) {
             if (task.isCompleted()) {
-                System.out.println("✓ " + task.getName() + " (ID: " + task.getId() + ")");
+                System.out.println(task.getName() + " (ID: " + task.getId() + ")");
                 foundRecent = true;
             }
         }
         if (!foundRecent) printInfo("No tasks completed in this session.");
-    }
-
-    // ======= EXIT SYSTEM =======
-    private void exitSystem() {
-        System.out.println(RED + BRIGHT + "\n" + "=".repeat(50) + RESET);
-        System.out.println(RED + BRIGHT + "         SYSTEM SHUTDOWN         " + RESET);
-        System.out.println(RED + BRIGHT + "=".repeat(50) + RESET);
-        
-        receiptGenerator.saveSessionSummary(equipmentList, taskList);
-        System.out.println(GREEN + "✓ Session summary saved to 'FarmWise_Summary.txt'" + RESET);
-        System.out.println(YELLOW + BRIGHT + "\nTHANK YOU FARMERS! UNTIL NEXT TIME, SEE YA!\n" + RESET);
     }
 
     // ======= UTILITY METHODS =======
@@ -708,15 +778,15 @@ public class FarmWise {
     }
 
     private void printSuccess(String message) {
-        System.out.println(GREEN + "✓ " + message + RESET);
+        System.out.println(GREEN + message + RESET);
     }
 
     private void printError(String message) {
-        System.out.println(RED + "✗ " + message + RESET);
+        System.out.println(RED + message + RESET);
     }
 
     private void printInfo(String message) {
-        System.out.println(CYAN + "ℹ " + message + RESET);
+        System.out.println(CYAN + message + RESET);
     }
 
     // ======= MAIN METHOD =======
