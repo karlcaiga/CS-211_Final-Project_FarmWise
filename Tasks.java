@@ -13,6 +13,7 @@ class Tasks extends FarmClass {
         this.dueDate = dueDate;
         this.prio = prio;
         this.isCompleted = false;
+        this.assignedEq = null;
     }
 
     public void assignEq(String equipmentId) {
@@ -44,23 +45,37 @@ class Tasks extends FarmClass {
         return completionDate;
     }
 
+    // NEW: Update task details
+    public void updateTask(String newName, String newPriority, Date newDueDate) {
+        if (newName != null && !newName.trim().isEmpty()) {
+            setName(newName);
+        }
+        if (newPriority != null && !newPriority.trim().isEmpty()) {
+            this.prio = newPriority.toUpperCase();
+        }
+        if (newDueDate != null) {
+            this.dueDate = newDueDate;
+        }
+    }
+
     @Override
     public String getStatus() {
-    String status = "PENDING";
+        String status = "PENDING";
         if (isCompleted) {
             status = "COMPLETED";
         } else if (new Date().after(dueDate)) {
             status = "OVERDUE";
         }
         return status;
-}
+    }
 
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm");
         String dueStr = sdf.format(dueDate);
         String equipment = assignedEq != null ? assignedEq : "Not assigned";
-        return String.format("%s | Due: %s | Priority: %s | Equipment: %s", 
-        super.toString(), dueStr, prio, equipment);
+        String status = getStatus();
+        return String.format("%s | Due: %s | Priority: %s | Equipment: %s | Status: %s",
+                super.toString(), dueStr, prio, equipment, status);
     }
 }

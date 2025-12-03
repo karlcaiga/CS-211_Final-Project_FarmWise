@@ -6,7 +6,7 @@ class Equipment extends FarmClass {
     private Date eqLastMaintenance;
     private boolean eqNeedsMaintenance;
 
-    public Equipment (String farmId, String farmName, String eqType) {
+    public Equipment(String farmId, String farmName, String eqType) {
         super(farmId, farmName);
         this.eqType = eqType;
         this.eqLastMaintenance = new Date();
@@ -34,19 +34,29 @@ class Equipment extends FarmClass {
         return eqType;
     }
 
+    // NEW: Update equipment details
+    public void updateEquipment(String newName, String newType) {
+        if (newName != null && !newName.trim().isEmpty()) {
+            setName(newName);
+        }
+        if (newType != null && !newType.trim().isEmpty()) {
+            this.eqType = newType;
+        }
+    }
+
     @Override
     public String getStatus() {
-    String status = "OPERATIONAL";
+        String status = "OPERATIONAL";
         if (eqNeedsMaintenance) {
             status = "NEEDS MAINTENANCE";
         }
-    return status;
+        return status;
     }
 
     @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-        return String.format("%s | Type: %s | Last Maintenance: %s", 
-        super.toString(), eqType, sdf.format(eqLastMaintenance));
+        return String.format("%s | Type: %s | Last Maintenance: %s",
+                super.toString(), eqType, sdf.format(eqLastMaintenance));
     }
 }

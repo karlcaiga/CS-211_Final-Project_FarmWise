@@ -12,54 +12,58 @@ class Receipt {
 
     public void generateReceipt(Tasks task) {
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter("taskReceipt_" + task.getId() + ".txt"));
+            String filename = "taskReceipt_" + task.getId() + ".txt";
+            PrintWriter writer = new PrintWriter(new FileWriter(filename));
 
-            writer.println("TASK COMPLETION RECEIPT");
-            writer.println("Task ID: " + task.getId());
-            writer.println("Task Name: " + task.getName());
-            writer.println("Completed: " + dateFormat.format(task.getCompletionDate()));
-            writer.println("Priority: " + task.getPriority());
-
-            String equipment;
-            if (task.getAssignedEq() != null) {
-                equipment = task.getAssignedEq();
-            } else {
-                equipment = "None";
-            }
-
-            writer.println("Equipment: " + equipment);
-            writer.println("Status: " + task.getStatus());
-            writer.println("Generated: " + dateFormat.format(new Date()));
+            writer.println("=".repeat(40));
+            writer.println("       TASK COMPLETION RECEIPT");
+            writer.println("=".repeat(40));
+            writer.println("Task ID:        " + task.getId());
+            writer.println("Task Name:      " + task.getName());
+            writer.println("Completed:      " + dateFormat.format(task.getCompletionDate()));
+            writer.println("Priority:       " + task.getPriority());
+            writer.println("Equipment:      " + (task.getAssignedEq() != null ? task.getAssignedEq() : "None"));
+            writer.println("Status:         " + task.getStatus());
+            writer.println("-".repeat(40));
+            writer.println("Generated:      " + dateFormat.format(new Date()));
+            writer.println("=".repeat(40));
             writer.close();
 
+            System.out.println("Receipt saved as: " + filename);
+
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }  
+            System.out.println("Error generating receipt: " + e.getMessage());
+        }
     }
 
     public void saveSessionSummary(List<Equipment> equipmentList, List<Tasks> taskList) {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter("FarmWise_Summary.txt"));
 
-            writer.println("FarmWise SUMMARY");
+            writer.println("=".repeat(50));
+            writer.println("           FARMWISE SESSION SUMMARY");
+            writer.println("=".repeat(50));
             writer.println("Generated: " + dateFormat.format(new Date()));
+            writer.println();
 
-            writer.println("EQUIPMENT: ");
-            for (int i = 0; i < equipmentList.size(); i++) {
-                Equipment eq = equipmentList.get(i);
-                writer.println("- " + eq.getName() + " (" + eq.getStatus() + ")");
+            writer.println("EQUIPMENT (" + equipmentList.size() + " items):");
+            writer.println("-".repeat(50));
+            for (Equipment eq : equipmentList) {
+                writer.println("• " + eq.getName() + " - " + eq.getStatus() + " (" + eq.getId() + ")");
+            }
+            writer.println();
+
+            writer.println("TASKS (" + taskList.size() + " items):");
+            writer.println("-".repeat(50));
+            for (Tasks task : taskList) {
+                writer.println("• " + task.getName() + " - " + task.getStatus() + " (" + task.getId() + ")");
             }
 
-            writer.println("TASK: ");
-            for (int i = 0; i < taskList.size(); i++) {
-                Tasks task = taskList.get(i);
-                writer.println("- " + task.getName() + " (" + task.getStatus() + ")");
-            }
-
+            writer.println("=".repeat(50));
             writer.close();
 
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error saving summary: " + e.getMessage());
         }
     }
 }
