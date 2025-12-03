@@ -58,6 +58,14 @@ Polymorphism is implemented through method overriding:
   - Handles file output operations for receipts and summaries
   - Generates task completion receipts and session reports
 
+ 
+### 📸 Snaps
+![FarmWise](./docs/assets/FarmWise.png)
+![StartUp](./docs/assets/StartUp.png)
+![Exit](./docs/assets/Exit.png)
+![OP1](./docs/assets/Output1.png)
+![OP2](./docs/assets/Output2.png)
+
 ## 🚀 How to Run the Program
 
 ### 📋 Prerequisites
