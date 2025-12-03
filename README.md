@@ -58,14 +58,6 @@ Polymorphism is implemented through method overriding:
   - Handles file output operations for receipts and summaries
   - Generates task completion receipts and session reports
 
- 
-### 📸 Snaps
-![FarmWise](./docs/assets/FarmWise.png)
-![StartUp](./docs/assets/StartUp.png)
-![Exit](./docs/assets/Exit.png)
-![OP1](./docs/assets/Output1.png)
-![OP2](./docs/assets/Output2.png)
-
 ## 🚀 How to Run the Program
 
 ### 📋 Prerequisites
@@ -102,7 +94,29 @@ javac *.java
 java FarmWise
 ```
 
-#### Future Enhancements
+## 📸 Snaps
+![FarmWise](./docs/assets/FarmWise.png)
+![StartUp](./docs/assets/StartUp.png)
+![Exit](./docs/assets/Exit.png)
+![OP1](./docs/assets/Output1.png)
+![OP2](./docs/assets/Output2.png)
+
+## Author and Contributors
+### Authors
+Our dedicated development team who brought FarmWise to life:
+- **[Caiga, Karl Andrei](https://github.com/karlcaiga)**
+- **[Dimaano, Josh John Wayne M.](https://github.com/Josh-Dimaano)**
+- **[Rada, Sean Zyrus F.](https://github.com/24-03421-dotcom)**
+## Acknowledgements
+Primary Credit: Mr. Juriel Comia - Course Instructor
+For his invaluable guidance, mentorship, and expertise throughout the development of FarmWise. His insightful feedback and dedication to teaching excellence were instrumental in shaping this project.
+
+Project Heritage: 
+FarmWise represents our journey as Second Year BSIT Students transitioning into professional developers. Every line of code reflects our learning, collaboration, and commitment to creating meaningful solutions.
+
+"From seed to harvest, from code to completion – FarmWise grows with you."
+
+## Future Enhancements
 To further strengthen the FarmWise system and expand its functionality, the researchers recommend implementing the following enhancements in future development cycles:
 - Graphical User Interface (GUI)
   > A dedicated GUI should be developed to replace the current console-based interface. Implementing a JavaFX or web-based interface would greatly improve usability by providing intuitive navigation, visual dashboards, and easier interaction for users who may not be familiar with command-line systems.
@@ -113,7 +127,7 @@ To further strengthen the FarmWise system and expand its functionality, the rese
 - Database Integration
   > Replacing the project’s current file-based storage system with a robust database solution—either SQL or NoSQL—is highly recommended. This would improve data reliability, enable faster data retrieval, support larger datasets, and ensure long-term scalability as the system grows.
 
-### References
+## References
 Shinde, S., Koleshwar, P., Deore, A., Dabhilkar, S., & Dalvi, D. (2025). FarmWise: Your Smart Farming Companion. International Journal of Computer Techniques, 12(5). https://ijctjournal.org/wp-content/uploads/2025/10/FarmWise-Your-Smart-Farming-Companion.pdf
 
 Vanjari, N., Ghadage, M., Wadekar, S., Tagare, D., & Shelke, S. (2025, January 25). AgroCare: AI-Powered Crop Management System. 2nd Insight International Research Conference (IIRC-2025). SSRN. https://ssrn.com/abstract=5251333 
