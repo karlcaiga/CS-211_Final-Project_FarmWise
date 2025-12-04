@@ -45,7 +45,6 @@ class Tasks extends FarmClass {
         return completionDate;
     }
 
-    // NEW: Update task details
     public void updateTask(String newName, String newPriority, Date newDueDate) {
         if (newName != null && !newName.trim().isEmpty()) {
             setName(newName);
@@ -60,13 +59,16 @@ class Tasks extends FarmClass {
 
     @Override
     public String getStatus() {
-        String status = "PENDING";
         if (isCompleted) {
-            status = "COMPLETED";
+            return "COMPLETED";
         } else if (new Date().after(dueDate)) {
-            status = "OVERDUE";
+            return "OVERDUE";
         }
-        return status;
+        return "PENDING";
+    }
+
+    public boolean isOverdue() {
+        return !isCompleted && new Date().after(dueDate);
     }
 
     @Override

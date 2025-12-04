@@ -34,7 +34,6 @@ class Equipment extends FarmClass {
         return eqType;
     }
 
-    // NEW: Update equipment details
     public void updateEquipment(String newName, String newType) {
         if (newName != null && !newName.trim().isEmpty()) {
             setName(newName);

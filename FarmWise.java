@@ -11,7 +11,7 @@ public class FarmWise {
     private int taskCounter;
     private SimpleDateFormat dateFormat;
 
-    // ======= COLORS =======
+    // COLORS
     private static final String RESET = "\u001B[0m";
     private static final String RED = "\u001B[31m";
     private static final String GREEN = "\u001B[32m";
@@ -20,13 +20,13 @@ public class FarmWise {
     private static final String MAGENTA = "\u001B[35m";
     private static final String BRIGHT = "\u001B[1m";
 
-    // ======= EQUIPMENT TYPES =======
+    // EQUIPMENT TYPES 
     private static final String[] EQUIPMENT_TYPES = {
         "Tractor", "Harvester", "Plow", "Seeder", "Irrigation System",
         "Sprayer", "Cultivator", "Loader", "Mower", "Other"
     };
 
-    // ======= PRIORITY LEVELS =======
+    // PRIORITY LEVELS
     private static final String[] PRIORITY_LEVELS = {"HIGH", "MEDIUM", "LOW"};
 
     public FarmWise() {
@@ -87,7 +87,7 @@ public class FarmWise {
 
     private void startProgram() {
 
-        // Main program loop
+        // Start
         while (true) {
             displayMainMenu();
             int choice = getIntInput("Choose an option: ");
@@ -160,7 +160,7 @@ public class FarmWise {
         System.out.println(MAGENTA + "╚════════════════════════════════════════╝\n" + RESET);
     }
 
-    // ======= MANAGE EQUIPMENT =======
+    // MANAGE EQUIPMENT
     private void manageEquipment() {
         while (true) {
             System.out.println(CYAN + BRIGHT + "\n" + "=".repeat(40) + RESET);
@@ -231,7 +231,7 @@ public class FarmWise {
         printSuccess(GREEN + BRIGHT + "Equipment added successfully! ID: " + id);
     }
 
-    // NEW: Update equipment
+    // UPDATE EQ
     private void updateEquipment() {
         viewAllEquipment();
         if (equipmentList.isEmpty()) return;
@@ -266,7 +266,7 @@ public class FarmWise {
         }
     }
 
-    // NEW: Delete equipment
+    // DEL EQ
     private void deleteEquipment() {
         viewAllEquipment();
         if (equipmentList.isEmpty()) return;
@@ -352,7 +352,7 @@ public class FarmWise {
         }
     }
 
-    // ======= MANAGE TASKS =======
+    // MANAGE TASKS
     private void manageTasks() {
         while (true) {
             System.out.println(YELLOW + BRIGHT + "\n" + "=".repeat(40) + RESET);
@@ -419,7 +419,7 @@ public class FarmWise {
             priority = "MEDIUM";
         }
         
-        // Date input with validation
+        // DATE INPUT ++ WITH VALIDATION
         Date dueDate = null;
         while (dueDate == null) {
             System.out.print("\nEnter due date (YYYY-MM-DD, or press Enter for 7 days from now): ");
@@ -448,7 +448,7 @@ public class FarmWise {
         printSuccess(GREEN + BRIGHT + "Task created successfully! ID: " + id);
     }
 
-    // NEW: Update task
+    // UPD TASK
     private void updateTask() {
         viewAllTasks();
         if (taskList.isEmpty()) return;
@@ -481,7 +481,7 @@ public class FarmWise {
                 newPriority = PRIORITY_LEVELS[priorityChoice - 1];
             }
             
-            // Date update
+            // DATE UPDAATE
             Date newDueDate = null;
             System.out.print("\nEnter new due date (YYYY-MM-DD, press Enter to skip): ");
             String dateInput = scanner.nextLine();
@@ -505,7 +505,7 @@ public class FarmWise {
         }
     }
 
-    // NEW: Delete task
+    // DELETE TASK
     private void deleteTask() {
         viewAllTasks();
         if (taskList.isEmpty()) return;
@@ -608,7 +608,7 @@ public class FarmWise {
         }
     }
 
-    // ======= SCHEDULE MAINTENANCE =======
+    // SCHEDULE MAINTENANCE
     private void scheduleMaintenance() {
         System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(40) + RESET);
         System.out.println(GREEN + BRIGHT + "         SCHEDULE MAINTENANCE              " + RESET);
@@ -633,7 +633,7 @@ public class FarmWise {
         System.out.println(CYAN + "\nNote: Use 'Perform Maintenance' option from Equipment menu to maintain these." + RESET);
     }
 
-    // ======= VIEW DATA AND REPORTS =======
+    // VIEW DATA AND REPORTS
     private void viewDataReports() {
         while (true) {
             System.out.println(GREEN + BRIGHT + "\n" + "=".repeat(40) + RESET);
@@ -688,12 +688,25 @@ public class FarmWise {
         int completed = 0, pending = 0, overdue = 0;
 
         for (Tasks task : taskList) {
-            String status = task.getStatus();
-            if (status.equals(GREEN + BRIGHT + "COMPLETED")) completed++;
-            else if (status.equals(RED + BRIGHT + "OVERDUE")) overdue++;
-            else pending++;
+            if (task.isCompleted()) {
+                completed++;
+            } else if (task.isOverdue()) {
+                overdue++;
+            } else {
+                pending++;
+            }
 
-            System.out.println("• " + task.getName() + " - " + status + " (" + task.getId() + ")");
+            String status = task.getStatus();
+            String coloredStatus;
+            if (status.equals("COMPLETED")) {
+                coloredStatus = GREEN + BRIGHT + status + RESET;
+            } else if (status.equals("OVERDUE")) {
+                coloredStatus = RED + BRIGHT + status + RESET;
+            } else {
+                coloredStatus = YELLOW + BRIGHT + status + RESET;
+            }
+            
+            System.out.println("• " + task.getName() + " - " + coloredStatus + " (" + task.getId() + ")");
         }
 
         System.out.println("\n" + "=".repeat(30));
@@ -727,26 +740,29 @@ public class FarmWise {
         System.out.println("=".repeat(30));
     }
 
-    // ======= SESSION SUMMARY =======
+    // SESSION SUMMARY
     private void showSessionSummary() {
         System.out.println(MAGENTA + BRIGHT + "\n" + "=".repeat(40) + RESET);
         System.out.println(MAGENTA + BRIGHT + "             SESSION SUMMARY         " + RESET);
         System.out.println(MAGENTA + BRIGHT + "=".repeat(40) + RESET);
         
         System.out.println("Total Equipment: " + equipmentList.size());
-
+        
         int completedTasks = 0, pendingTasks = 0, overdueTasks = 0;
         for (Tasks task : taskList) {
-            String status = task.getStatus();
-            if (status.equals(GREEN + BRIGHT +"COMPLETED")) completedTasks++;
-            else if (status.equals(RED + BRIGHT + "OVERDUE")) overdueTasks++;
-            else pendingTasks++;
+            if (task.isCompleted()) {
+                completedTasks++;
+            } else if (task.isOverdue()) {
+                overdueTasks++;
+            } else {
+                pendingTasks++;
+            }
         }
 
         System.out.println("Total Tasks: " + taskList.size());
-        System.out.println(GREEN + BRIGHT + "Completed: " + completedTasks);
-        System.out.println(YELLOW + BRIGHT +"Pending: " + pendingTasks);
-        System.out.println(RED + BRIGHT + "Overdue: " + overdueTasks);
+        System.out.println(GREEN + BRIGHT + "Completed: " + completedTasks + RESET);
+        System.out.println(YELLOW + BRIGHT + "Pending: " + pendingTasks + RESET);
+        System.out.println(RED + BRIGHT + "Overdue: " + overdueTasks + RESET);
 
         int maintenanceNeeded = 0;
         for (Equipment eq : equipmentList) {
@@ -757,15 +773,15 @@ public class FarmWise {
         System.out.println("\nRECENTLY COMPLETED TASKS:");
         boolean foundRecent = false;
         for (Tasks task : taskList) {
-            if (task.isCompleted()) {
-                System.out.println(task.getName() + " (ID: " + task.getId() + ")");
+            if (task.isCompleted()) {  // ✅ FIXED: Use boolean method directly
+                System.out.println("• " + task.getName() + " (ID: " + task.getId() + ")");
                 foundRecent = true;
             }
         }
         if (!foundRecent) printInfo("No tasks completed in this session.");
     }
 
-    // ======= UTILITY METHODS =======
+    // UTILITY METHODS
     private int getIntInput(String prompt) {
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
